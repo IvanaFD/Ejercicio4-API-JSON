@@ -25,3 +25,17 @@ func LoadVillagers()([]models.Villager, error){
 
 	return villagers, nil
 }
+
+func SaveVillagers(villagers []models.Villager) error {
+
+	file, err := os.Create("data/villagers.json")
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	encoder := json.NewEncoder(file)
+	encoder.SetIndent("", "  ")
+
+	return encoder.Encode(villagers)
+}

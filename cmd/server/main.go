@@ -17,7 +17,20 @@ func main(){
 
 	//respuesta de prueba de pin-pong, si recibe la ruta /api/ping devuelve el resultado de la funcion pinghandler
 	http.HandleFunc("/api/piringo", pingHandler)
-	http.HandleFunc("/api/villagers", handlers.GetVillagers) //endpoint villagers da todo el .json con los datos de los aldeanos
+	http.HandleFunc("/api/villagers", func(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method == http.MethodGet {
+		handlers.GetVillagers(w, r)
+		return
+	}
+
+	if r.Method == http.MethodPost {
+		handlers.CreateVillager(w, r)
+		return
+	}
+
+	http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+})
 	
 	//mensaje en cnsola que esta sirviendo en el puerto 24785, si esta ocupado me da un error
 	log.Println("Server running in: 24785")

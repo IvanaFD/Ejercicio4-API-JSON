@@ -1,9 +1,11 @@
 package handlers
 
 import(
+	"encoding/json"
 	"net/http"
 	"strconv"
 	"stardew_villagers/internal/storage"
+	"stardew_villagers/internal/models"
 	"stardew_villagers/internal/utils"
 )
 
@@ -42,3 +44,33 @@ func GetVillagers(w http.ResponseWriter, r *http.Request){
 
 	http.Error(w, "Villager not found", http.StatusNotFound)
 }
+
+func CreateVillager(w http.ResponseWriter, r *http.Request){
+
+	var newVillager models.Villager
+
+	err := json.NewDecoder(r.Body).Decode(&newVillager)
+	if err != nil {
+		http.Error(w, "Invalid JSON body", http.StatusBadRequest)
+		return
+	}
+
+	villagers, err := storage.LoadVillagers()
+	if err != nil {
+		http.Error(w, "Error loading villagers", http.StatusInternalServerError)
+		return
+	}
+
+	newVillager.ID = len(villagers) + 1
+
+	villagers = append(villagers, newVillager)
+	
+	err = storage.SaveVillagers(villagers)
+	if err != nil {
+		http.Error(w, "Error saving villagers", http.StatusInternalServerError)
+		return
+	}
+	utils.WriteJSON(w, http.StatusOK, newVillager)
+}
+
+
