@@ -1,9 +1,11 @@
 package main
 
 import (
-	"encoding/json"
+	
 	"log"
 	"net/http"
+	"stardew_villagers/internal/handlers"
+	"stardew_villagers/internal/utils"
 )
 
 //Convierte en json la respuesta que GO no puede enviar json
@@ -15,6 +17,7 @@ func main(){
 
 	//respuesta de prueba de pin-pong, si recibe la ruta /api/ping devuelve el resultado de la funcion pinghandler
 	http.HandleFunc("/api/piringo", pingHandler)
+	http.HandleFunc("/api/villagers", handlers.GetVillagers) //endpoint villagers da todo el .json con los datos de los aldeanos
 	
 	//mensaje en cnsola que esta sirviendo en el puerto 24785, si esta ocupado me da un error
 	log.Println("Server running in: 24785")
@@ -27,15 +30,6 @@ func pingHandler(w http.ResponseWriter, r *http.Request){
 	response := Message{
 		Message: "porongo",
 	}
-	writeJSON(w, http.StatusOK, response)
+	utils.WriteJSON(w, http.StatusOK, response)
 }
 
-func writeJSON(w http.ResponseWriter, status int, payload interface{}){
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(status)
-
-	err := json.NewEncoder(w).Encode(payload)
-	if err != nil{
-		http.Error(w,"Internal Server Erro", http.StatusInternalServerError)
-	}
-}
