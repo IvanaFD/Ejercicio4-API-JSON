@@ -8,7 +8,7 @@ import (
 	"stardew_villagers/internal/utils"
 )
 
-//Convierte en json la respuesta que GO no puede enviar json
+//Convierte en json la respuesta que GO no puede enviar json, solo se uso para el endpoint de prueba
 type Message struct{
 	Message string `json:"message"`
 }
