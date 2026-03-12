@@ -28,8 +28,8 @@
   },
   {
     "id": 3,
-    "name": "Elliott",
-    "birthday": "Fall 5",
+    "name": "JOSE JOSE",
+    "birthday": "AVENIDA 5",
     "marriageable": true,
     "best_gifts": [
       "Crab Cakes",
@@ -152,14 +152,14 @@
     "location": "Trailer"
   },
   {
-    "id": 11,
-    "name": "Test Villager",
-    "birthday": "Spring 10",
+    "id": 12,
+    "name": "Willy",
+    "birthday": "Summer 24",
     "marriageable": false,
     "best_gifts": [
-      "Diamond",
-      "Coffee"
+      "Pumpkin",
+      "Diamond"
     ],
-    "location": "Town"
+    "location": "The beach"
   }
 ]

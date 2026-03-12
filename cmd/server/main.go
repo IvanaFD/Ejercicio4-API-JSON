@@ -15,24 +15,29 @@ type Message struct{
 
 func main(){
 
-	//respuesta de prueba de pin-pong, si recibe la ruta /api/ping devuelve el resultado de la funcion pinghandler
+	//endpoint de prueba para verificar que si responde el servidor
 	http.HandleFunc("/api/piringo", pingHandler)
+	//handler para path aprameters, al registrar con una barra al final Go lo trare como prefijo
+	http.HandleFunc("/api/villagers/", handlers.VillagerByIDHandler)
+	//handler principal, filtra la peticion segun el metodo HTTP
 	http.HandleFunc("/api/villagers", func(w http.ResponseWriter, r *http.Request) {
 
-	if r.Method == http.MethodGet {
-		handlers.GetVillagers(w, r)
-		return
-	}
-
-	if r.Method == http.MethodPost {
-		handlers.CreateVillager(w, r)
-		return
-	}
-
-	http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-})
+	switch r.Method {
+        case http.MethodGet:
+            handlers.GetVillagers(w, r)
+        case http.MethodPost:
+            handlers.PostVillager(w, r)
+        case http.MethodPut:
+            handlers.PutVillager(w, r)
+        case http.MethodDelete:
+            handlers.DeleteVillager(w, r)
+        default:
+            // Si el método no es ninguno de los anteriores, devolvemos 405
+            http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+        }
+	})
 	
-	//mensaje en cnsola que esta sirviendo en el puerto 24785, si esta ocupado me da un error
+	//mensaje que esta sirviendo en el puerto 24785, si esta ocupado me da un error
 	log.Println("Server running in: 24785")
 	log.Fatal(http.ListenAndServe(":24785",nil))
 
