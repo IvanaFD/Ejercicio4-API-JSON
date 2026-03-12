@@ -33,7 +33,7 @@ func main(){
             handlers.DeleteVillager(w, r)
         default:
             // Si el método no es ninguno de los anteriores, devolvemos 405
-            http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+            utils.WriteError(w, http.StatusMethodNotAllowed, "Method not allowed")
         }
 	})
 	

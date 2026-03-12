@@ -17,7 +17,8 @@ func GetVillagers(w http.ResponseWriter, r *http.Request){
 
 	villagers, err := storage.LoadVillagers()
 	if err != nil {
-		http.Error(w,"Error loading villagers", http.StatusInternalServerError)
+		
+		utils.WriteError(w,http.StatusInternalServerError, "Error loading villagers")
 		return
 	}
 
@@ -32,7 +33,8 @@ func GetVillagers(w http.ResponseWriter, r *http.Request){
 
 	id, err := strconv.Atoi(idParam)
 	if err != nil{
-		http.Error(w, "Invalid id parameter", http.StatusBadRequest)
+		
+		utils.WriteError(w, http.StatusBadRequest, "Invalid id parameter")
 		return
 	}
 
@@ -43,7 +45,7 @@ func GetVillagers(w http.ResponseWriter, r *http.Request){
 		}
 	}
 
-	http.Error(w, "Villager not found", http.StatusNotFound)
+	utils.WriteError(w, http.StatusNotFound, "Villager not found")
 }
 
 
@@ -54,13 +56,21 @@ func PostVillager(w http.ResponseWriter, r *http.Request){
 
 	err := json.NewDecoder(r.Body).Decode(&newVillager)
 	if err != nil {
-		http.Error(w, "Invalid JSON body", http.StatusBadRequest)
+		
+		utils.WriteError(w, http.StatusBadRequest, "Invalid JSON body")
+		return
+	}
+
+	validationError := utils.ValidateVillager(newVillager)
+	if validationError != "" {
+		utils.WriteError(w, http.StatusBadRequest, validationError)
 		return
 	}
 
 	villagers, err := storage.LoadVillagers()
 	if err != nil {
-		http.Error(w, "Error loading villagers", http.StatusInternalServerError)
+		
+		utils.WriteError(w, http.StatusInternalServerError, "Error loading villagers")
 		return
 	}
 
@@ -78,7 +88,8 @@ func PostVillager(w http.ResponseWriter, r *http.Request){
 	
 	err = storage.SaveVillagers(villagers)
 	if err != nil {
-		http.Error(w, "Error saving villagers", http.StatusInternalServerError)
+		
+		utils.WriteError(w, http.StatusInternalServerError, "Error saving villagers")
 		return
 	}
 	utils.WriteJSON(w, http.StatusCreated, newVillager)
@@ -92,7 +103,7 @@ func PutVillager(w http.ResponseWriter, r *http.Request){
 
 	id, err := strconv.Atoi(idParam)
 	if err != nil{
-		http.Error(w, "Invalid id parameter", http.StatusBadRequest)
+		utils.WriteError(w,  http.StatusBadRequest, "Invalid id parameter")
 		return
 	}
 
@@ -100,13 +111,21 @@ func PutVillager(w http.ResponseWriter, r *http.Request){
 
 	err = json.NewDecoder(r.Body).Decode(&updateVillager)
 	if err != nil {
-		http.Error(w, "Invalid JSON body", http.StatusBadRequest)
+		
+		utils.WriteError(w, http.StatusBadRequest, "Invalid JSON body")
+		return
+	}
+
+	validationError := utils.ValidateVillager(updateVillager)
+	if validationError != "" {
+		utils.WriteError(w, http.StatusBadRequest, validationError)
 		return
 	}
 
 	villagers, err := storage.LoadVillagers()
 	if err != nil {
-		http.Error(w, "Error loading villagers", http.StatusInternalServerError)
+		
+		utils.WriteError(w, http.StatusInternalServerError, "Error loading villagers")
 		return
 	}
 
@@ -118,7 +137,7 @@ func PutVillager(w http.ResponseWriter, r *http.Request){
 
 			err = storage.SaveVillagers(villagers)
 			if err != nil {
-				http.Error(w, "Error saving villagers", http.StatusInternalServerError)
+				utils.WriteError(w, http.StatusInternalServerError, "Error saving villagers")
 				return
 			}
 
@@ -126,7 +145,7 @@ func PutVillager(w http.ResponseWriter, r *http.Request){
 			return
 		}
 	}
-	http.Error(w, "Villager not found", http.StatusNotFound)
+	utils.WriteError(w, http.StatusNotFound, "Villager not found")
 }
 
 
@@ -138,13 +157,13 @@ func DeleteVillager(w http.ResponseWriter, r *http.Request){
 
 	id, err := strconv.Atoi(idParam)
 	if err != nil{
-		http.Error(w, "Invalid id parameter", http.StatusBadRequest)
+		utils.WriteError(w,http.StatusBadRequest, "Invalid id parameter")
 		return
 	}
 
 	villagers, err := storage.LoadVillagers()
 	if err != nil {
-		http.Error(w, "Error loading villagers", http.StatusInternalServerError)
+		utils.WriteError(w, http.StatusInternalServerError, "Error loading villagers")
 		return
 	}
 
@@ -155,7 +174,7 @@ func DeleteVillager(w http.ResponseWriter, r *http.Request){
 
 			err = storage.SaveVillagers(villagers)
 			if err != nil {
-				http.Error(w, "Error saving villagers", http.StatusInternalServerError)
+				utils.WriteError(w, http.StatusInternalServerError, "Error saving villagers")
 				return
 			}
 
@@ -165,7 +184,7 @@ func DeleteVillager(w http.ResponseWriter, r *http.Request){
 		}
 	}
 
-	http.Error(w, "Villager not found", http.StatusNotFound)
+	utils.WriteError(w, http.StatusNotFound, "Villager not found")
 
 }
 
@@ -176,7 +195,7 @@ func VillagerByIDHandler(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(path, "/")
 
 	if len(parts) < 4 {
-		http.Error(w, "Invalid path", http.StatusBadRequest)
+		utils.WriteError(w, http.StatusBadRequest, "Invalid path")
 		return
 	}
 
@@ -184,13 +203,13 @@ func VillagerByIDHandler(w http.ResponseWriter, r *http.Request) {
 
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
-		http.Error(w, "Invalid id", http.StatusBadRequest)
+		utils.WriteError(w, http.StatusBadRequest, "Invalid id")
 		return
 	}
 
 	villagers, err := storage.LoadVillagers()
 	if err != nil {
-		http.Error(w, "Error loading villagers", http.StatusInternalServerError)
+		utils.WriteError(w, http.StatusInternalServerError, "Error loading villagers")
 		return
 	}
 
@@ -201,7 +220,7 @@ func VillagerByIDHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	http.Error(w, "Villager not found", http.StatusNotFound)
+	utils.WriteError(w, http.StatusNotFound, "Villager not found")
 }
 
 

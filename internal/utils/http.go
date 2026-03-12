@@ -3,6 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"net/http"
+	
 )
 
 func WriteJSON(w http.ResponseWriter, status int, payload interface{}) {
@@ -13,6 +14,6 @@ func WriteJSON(w http.ResponseWriter, status int, payload interface{}) {
 
 	err := json.NewEncoder(w).Encode(payload)
 	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		WriteError(w, http.StatusInternalServerError, "Internal Server Error")
 	}
 }
