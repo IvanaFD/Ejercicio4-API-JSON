@@ -17,6 +17,8 @@ func main(){
 
 	//endpoint de prueba para verificar que si responde el servidor
 	http.HandleFunc("/api/piringo", pingHandler)
+
+	http.HandleFunc("/", handlers.APIInfoHandler)
 	//handler para path aprameters, al registrar con una barra al final Go lo trare como prefijo
 	http.HandleFunc("/api/villagers/", handlers.VillagerByIDHandler)
 	//handler principal, filtra la peticion segun el metodo HTTP

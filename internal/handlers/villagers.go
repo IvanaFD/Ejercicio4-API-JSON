@@ -23,31 +23,66 @@ func GetVillagers(w http.ResponseWriter, r *http.Request){
 	}
 
 	query := r.URL.Query()
+
 	idParam := query.Get("id")
+	locationParam := query.Get("location")
+	marriageableParam := query.Get("marriageable") 
 
-	//si no hay id, da el .json completp, si tiene lo convierte a id y regresa al aldeado especifico del id
-	if idParam == "" {
-		utils.WriteJSON(w, http.StatusOK, villagers)
-		return
-	}
+	if idParam != ""{
 
-	id, err := strconv.Atoi(idParam)
-	if err != nil{
-		
-		utils.WriteError(w, http.StatusBadRequest, "Invalid id parameter")
-		return
-	}
-
-	for _,  villager := range villagers {
-		if villager.ID == id {
-			utils.WriteJSON(w, http.StatusOK, villager)
+		id, err := strconv.Atoi(idParam)
+		if err != nil{
+			
+			utils.WriteError(w, http.StatusBadRequest, "Invalid id parameter")
 			return
 		}
+
+		for _,  villager := range villagers {
+			if villager.ID == id {
+				utils.WriteJSON(w, http.StatusOK, villager)
+				return
+			}
+		}
+		utils.WriteError(w, http.StatusNotFound, "Villager not found")
+		return
+	}
+	
+	filtered := []models.Villager{}
+
+	for _, v := range villagers{
+
+		if locationParam != ""{
+			if !strings.EqualFold(v.Location, locationParam){
+			continue
+			}
+		}
+
+		if marriageableParam != ""{
+			m, err := strconv.ParseBool(marriageableParam)
+			if err != nil{
+				utils.WriteError(w, http.StatusBadRequest, "Invalid marriageable paramether")
+				return
+			}	
+
+			if v.Marriageable != m {
+				continue
+			}
+		}
+
+		filtered = append(filtered, v)
 	}
 
-	utils.WriteError(w, http.StatusNotFound, "Villager not found")
-}
+	if locationParam != "" || marriageableParam != ""{
+		if len(filtered) == 0 {
+			utils.WriteError(w, http.StatusNotFound, "Villager not found")
+			return
+		}			
 
+		utils.WriteJSON(w, http.StatusOK, filtered)
+		return
+	}
+	utils.WriteJSON(w, http.StatusOK, villagers)
+}
 
 //poder hacer un POST de un nuevo aldeano y se guarda en el villagers.json
 func PostVillager(w http.ResponseWriter, r *http.Request){
