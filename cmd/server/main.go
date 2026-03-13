@@ -8,7 +8,7 @@ import (
 	"stardew_villagers/internal/utils"
 )
 
-//Convierte en json la respuesta que GO no puede enviar json, solo se uso para el endpoint de prueba
+
 type Message struct{
 	Message string `json:"message"`
 }
@@ -24,6 +24,8 @@ func main(){
 	//handler principal, filtra la peticion segun el metodo HTTP
 	http.HandleFunc("/api/villagers", func(w http.ResponseWriter, r *http.Request) {
 
+
+		
 	switch r.Method {
         case http.MethodGet:
             handlers.GetVillagers(w, r)
