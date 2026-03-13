@@ -4,3 +4,5 @@ services:
     container_name: stardew-api
     ports:
       - "24785:24785"
+    volumes:
+      - .:/app
