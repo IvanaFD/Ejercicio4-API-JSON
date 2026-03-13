@@ -5,7 +5,17 @@
 Simple REST API desarrollada en Go para gestionar la información de los aldeanos en Stardew Valley.  
 La API permite consultar, agregar, actualizar y eliminar aldeanos utilizando un archivo JSON como almacenamiento.
 
+---
 
+## API desplegada
+
+La API se encuentra desplegada y funcionando en el siguiente endpoint público:
+
+```
+https://bombardeen-palencia.xyz/ivanafd/Ejercicio4-API-JSON/api/villagers
+```
+
+---
 
 ## Puerto del servidor
 
@@ -15,40 +25,41 @@ El servidor se ejecuta en el puerto correspondiente al número de carnet:
 http://localhost:24785
 ```
 
-
+---
 
 ## Estructura del Proyecto
 
 ```
 stardew-api/
 │
-├── cmd/
-│   └── server/
-│       └── main.go
+├── main.go
 │
 ├── data/
 │   └── villagers.json
 │
 ├── internal/
 │   ├── handlers/
-|   |   └── info.go
-|   |   └── villagers.go
-|   |
+│   │   └── info.go
+│   │   └── villagers.go
+│   │
 │   ├── models/
-|   |   └── villager.go
-|   |
+│   │   └── villager.go
+│   │
 │   ├── storage/
-|   |   └── json_store.go
-|   |
+│   │   └── json_store.go
+│   │
 │   └── utils/
-|       └── error.go
-|       └── http.go
+│       └── error.go
+│       └── http.go
 │
 ├── Dockerfile
 ├── docker-compose.yml
 ├── go.mod
 └── README.md
 ```
+
+---
+
 # Modelo de datos
 
 Cada aldeano tiene la siguiente estructura:
@@ -64,7 +75,6 @@ Cada aldeano tiene la siguiente estructura:
 }
 ```
 
-
 Campos:
 
 | Campo | Tipo | Descripción |
@@ -77,7 +87,6 @@ Campos:
 | location | string | Lugar donde vive |
 
 ---
-
 
 # Query Parameters
 
@@ -114,7 +123,7 @@ Ejemplo de respuesta:
 ```json
 {
   "api": "Stardew Villagers API",
-  "author": "Ivana FIgueroa",
+  "author": "Ivana Figueroa",
   "description": "Simple REST API to manage Stardew Valley villagers",
   "endpoints": [
     "GET /api/villagers",
@@ -127,7 +136,9 @@ Ejemplo de respuesta:
   "version": "1.0"
 }
 ```
+
 ---
+
 ### Obtener todos los aldeanos
 
 ```
@@ -178,7 +189,7 @@ PUT http://localhost:24785/api/villagers?id=3
 DELETE http://localhost:24785/api/villagers?id=3
 ```
 
-
+---
 
 # Persistencia de datos
 
@@ -190,9 +201,9 @@ data/villagers.json
 
 Las operaciones:
 
-- POST
-- PUT
-- DELETE
+- POST  
+- PUT  
+- DELETE  
 
 guardan automáticamente los cambios en este archivo.
 
@@ -203,7 +214,7 @@ guardan automáticamente los cambios en este archivo.
 ### Ejecutar localmente
 
 ```
-go run cmd/server/main.go
+go run main.go
 ```
 
 Servidor disponible en:
@@ -242,11 +253,9 @@ El server corriendo de forma local con el endpoint que devuelve la información 
 
 ### 3. GET utilizando query parameters
 
-
-![GET id 1](/images/cap3.png)
-![GET id 1 con path](/images/cap4.png)
+![GET id 1](/images/cap3.png)  
+![GET id 1 con path](/images/cap4.png)  
 ![GET filtros combinados](/images/cap5.png)
-
 
 ---
 
@@ -258,31 +267,39 @@ El server corriendo de forma local con el endpoint que devuelve la información 
 
 ### 5. PUT exitoso
 
-se cambio la locación del aldeano que se creo en el PUT anterior
+Se cambió la locación del aldeano que se creó anteriormente.
+
 ![Put de un aldeano](/images/cap7.png)
 
 ---
 
 ### 6. DELETE exitoso
 
-Y finalmente se elimino el aldeno de la data
+Finalmente se eliminó el aldeano de la data.
+
 ![DELETE del aldeano id 12](/images/cap8.png)
 
+---
 
 ### 7. Casos de error
 
-Respuesta al colocar id de un aldeano no registrado en la data
+Respuesta al colocar id de un aldeano no registrado en la data.
+
 ![id no encontrado](/images/cap9.png)
 
-Respuesta al colocar mal los parametros
-![id no encontrado](/images/cap10.png)
+Respuesta al colocar mal los parámetros.
 
+![parametros incorrectos](/images/cap10.png)
 
-Respuesta al hacer un POST con un parámetro vacío
-![id no encontrado](/images/cap11.png)
+Respuesta al hacer un POST con un parámetro vacío.
 
-Respuesta al hacer un GET y no hay ningun aldeano que cumpla con los parámetros
-![id no encontrado](/images/cap12.png)
+![post error](/images/cap11.png)
+
+Respuesta al hacer un GET y no hay ningún aldeano que cumpla con los parámetros.
+
+![sin resultados](/images/cap12.png)
+
+---
 
 # Tecnologías utilizadas
 
